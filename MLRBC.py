@@ -206,12 +206,12 @@ def MLRBC(exp):
 
             # Major Run Parameters -----------------------------------------------------------------------------------------
             self.trainFile = trainFile  # par['trainFile']                                       #Saved as text
-            self.testFile = testFile  # par['testFile']                                         #Saved as text
-            self.originalOutFileName = outFileName  # str(par['outFileName'])                      #Saved as text
-            self.outFileName = outFileName + '_MLCS'  # str(par['outFileName'])+'_eLCS'                  #Saved as text
-            self.learningIterations = learningIterations  # par['learningIterations']                     #Saved as text
-            self.N = N  # int(par['N'])                                                  #Saved as integer
-            self.p_spec = p_spec  # float(par['p_spec'])                                      #Saved as float
+            self.testFile = testFile  # par['testFile']                                          #Saved as text
+            self.originalOutFileName = outFileName  # str(par['outFileName'])                    #Saved as text
+            self.outFileName = outFileName + '_MLCS'  # str(par['outFileName'])+'_eLCS'          #Saved as text
+            self.learningIterations = learningIterations  # par['learningIterations']            #Saved as text
+            self.N = N  # int(par['N'])                                                          #Saved as integer
+            self.p_spec = p_spec  # float(par['p_spec'])                                         #Saved as float
 
             # Logistical Run Parameters ------------------------------------------------------------------------------------
             # if par['randomSeed'] == 'False' or par['randomSeed'] == 'false':
@@ -219,37 +219,37 @@ def MLRBC(exp):
                 self.useSeed = False  # Saved as Boolean
             else:
                 self.useSeed = True  # Saved as Boolean
-                self.randomSeed = randomSeed  # int(par['randomSeed'])                #Saved as integer
+                self.randomSeed = randomSeed  # int(par['randomSeed'])                           #Saved as integer
 
-            self.labelInstanceID = labelInstanceID  # par['labelInstanceID']                           #Saved as text
-            self.labelPhenotype = labelPhenotype  # par['labelPhenotype']                             #Saved as text
+            self.labelInstanceID = labelInstanceID  # par['labelInstanceID']                     #Saved as text
+            self.labelPhenotype = labelPhenotype  # par['labelPhenotype']                        #Saved as text
             self.labelConfidence = labelConfidence
-            self.labelMissingData = labelMissingData  # par['labelMissingData']                         #Saved as text
+            self.labelMissingData = labelMissingData  # par['labelMissingData']                  #Saved as text
             self.discreteAttributeLimit = discreteAttributeLimit  # int(par['discreteAttributeLimit'])        #Saved as integer
-            self.trackingFrequency = trackingFrequency  # int(par['trackingFrequency'])                  #Saved as integer
+            self.trackingFrequency = trackingFrequency  # int(par['trackingFrequency'])          #Saved as integer
             self.discretePhenotypeLimit = discretePhenotypeLimit
 
             # Supervised Learning Parameters -------------------------------------------------------------------------------
-            self.nu = nu  # int(par['nu'])                                                #Saved as integer
-            self.chi = chi  # float(par['chi'])                                            #Saved as float
-            self.upsilon = upsilon  # float(par['upsilon'])                                    #Saved as float
-            self.theta_GA = theta_GA  # int(par['theta_GA'])                                    #Saved as integer
+            self.nu = nu  # int(par['nu'])                                                       #Saved as integer
+            self.chi = chi  # float(par['chi'])                                                  #Saved as float
+            self.upsilon = upsilon  # float(par['upsilon'])                                      #Saved as float
+            self.theta_GA = theta_GA  # int(par['theta_GA'])                                     #Saved as integer
             self.theta_del = theta_del  # int(par['theta_del'])                                  #Saved as integer
             self.theta_sub = theta_sub  # int(par['theta_sub'])                                  #Saved as integer
-            self.acc_sub = acc_sub  # float(par['acc_sub'])                                    #Saved as float
-            self.beta = beta  # float(par['beta'])                                          #Saved as float
+            self.acc_sub = acc_sub  # float(par['acc_sub'])                                      #Saved as float
+            self.beta = beta  # float(par['beta'])                                               #Saved as float
             self.delta = delta  # float(par['delta'])
-            self.init_fit = init_fit  # float(par['init_fit'])                                  #Saved as float
+            self.init_fit = init_fit  # float(par['init_fit'])                                   #Saved as float
             self.fitnessReduction = fitnessReduction  # float(par['fitnessReduction'])
 
             # Algorithm Heuristic Options --New-------------------------------------------------------------------------
-            self.doSubsumption = doSubsumption  # bool(int(par['doSubsumption']))                    #Saved as Boolean
-            self.selectionMethod = selectionMethod  # par['selectionMethod']                           #Saved as text
+            self.doSubsumption = doSubsumption  # bool(int(par['doSubsumption']))                #Saved as Boolean
+            self.selectionMethod = selectionMethod  # par['selectionMethod']                     #Saved as text
             self.theta_sel = theta_sel  # float(par['theta_sel'])                                #Saved as float
 
             # PopulationReboot -------------------------------------------------------------------------------
-            self.doPopulationReboot = doPopulationReboot  # bool(int(par['doPopulationReboot']))          #Saved as Boolean
-            self.popRebootPath = popRebootPath  # par['popRebootPath']                               #Saved as text
+            self.doPopulationReboot = doPopulationReboot  # bool(int(par['doPopulationReboot'])) #Saved as Boolean
+            self.popRebootPath = popRebootPath  # par['popRebootPath']                           #Saved as text
 
         # New
         def referenceTimer(self, timer):
@@ -2589,32 +2589,6 @@ def MLRBC(exp):
             # Balanced and Standard Accuracies will only be the same when there are equal instances representative of each phenotype AND there is 100% covering.
             resultList = [adjustedAccuracyEstimate, instanceCoverage]
             return resultList
-
-        def populationReboot(self):
-            """ Manages the reformation of a previously saved eLCS classifier population. """
-            # --------------------------------------------------------------------
-            try:  # Re-open track learning file for continued tracking of progress.
-                self.learnTrackOut = open(cons.outFileName + '_LearnTrack.txt', 'a')
-            except Exception as inst:
-                print(type(inst))
-                print(inst.args)
-                print(inst)
-                print('cannot open', cons.outFileName + '_LearnTrack.txt')
-                raise
-
-            # Extract last iteration from file name---------------------------------------------
-            temp = cons.popRebootPath.split('_')
-            iterRef = len(temp) - 1
-            completedIterations = int(temp[iterRef])
-            print("Rebooting rule population after " + str(completedIterations) + " iterations.")
-            self.exploreIter = completedIterations - 1
-            for i in range(len(cons.learningCheckpoints)):  # checkpoints not in demo 2
-                cons.learningCheckpoints[i] += completedIterations
-            cons.maxLearningIterations += completedIterations
-
-            # Rebuild existing population from text file.--------
-            self.population = ClassifierSet(cons.popRebootPath)
-
 
     class OutputFileManager:
 
