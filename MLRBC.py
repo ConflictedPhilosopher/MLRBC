@@ -11,7 +11,7 @@ def MLRBC(exp):
     trainFile="emotions-train.txt"		            # Path/FileName of training dataset
     testFile='emotions-test.txt'					# Path/FileName of testing dataset.  If no testing data available or desired, put 'None'.
     outFileName="emotions"							# Path/NewName for new algorithm output files. Note: Do not give a file extension, this is done automatically.
-    learningIterations='2000'						# Specify complete algorithm evaluation checkpoints and maximum number of learning iterations (e.g. 1000.2000.5000 = A maximum of 5000 learning iterations with evaluations at 1000, 2000, and 5000 iterations)
+    learningIterations='1000'						# Specify complete algorithm evaluation checkpoints and maximum number of learning iterations (e.g. 1000.2000.5000 = A maximum of 5000 learning iterations with evaluations at 1000, 2000, and 5000 iterations)
     N=10000									    	# Maximum size of the rule population (a.k.a. Micro-classifier population size, where N is the sum of the classifier numerosities in the population)
     p_spec=0.4  									# The probability of specifying an attribute when covering. (1-p_spec = the probability of adding '#' in ternary rule representations). Greater numbers of attributes in a dataset will require lower values of p_spec.
 
@@ -21,7 +21,6 @@ def MLRBC(exp):
     randomSeed=False								# Set a constant random seed value to some integer (in order to obtain reproducible results). Put 'False' if none (for pseudo-random algorithm runs).
     labelInstanceID="InstanceID"					# Label for the data column header containing instance ID's.  If included label not found, algorithm assumes that no instance ID's were included.
     labelPhenotype="Class"							# Label for the data column header containing the phenotype label. (Typically 'Class' for case/control datasets)
-    labelConfidence = "Confidence"
     labelMissingData="NA"							# Label used for any missing data in the data set.
     discreteAttributeLimit = 1						# The maximum number of attribute states allowed before an attribute or phenotype is considered to be continuous (Set this value >= the number of states for any discrete attribute or phenotype in their dataset).
     discretePhenotypeLimit = 2000
@@ -206,12 +205,12 @@ def MLRBC(exp):
 
             # Major Run Parameters -----------------------------------------------------------------------------------------
             self.trainFile = trainFile  # par['trainFile']                                       #Saved as text
-            self.testFile = testFile  # par['testFile']                                          #Saved as text
-            self.originalOutFileName = outFileName  # str(par['outFileName'])                    #Saved as text
-            self.outFileName = outFileName + '_MLCS'  # str(par['outFileName'])+'_eLCS'          #Saved as text
-            self.learningIterations = learningIterations  # par['learningIterations']            #Saved as text
-            self.N = N  # int(par['N'])                                                          #Saved as integer
-            self.p_spec = p_spec  # float(par['p_spec'])                                         #Saved as float
+            self.testFile = testFile  # par['testFile']                                         #Saved as text
+            self.originalOutFileName = outFileName  # str(par['outFileName'])                      #Saved as text
+            self.outFileName = outFileName + '_MLRBC'  # str(par['outFileName'])+'_eLCS'                  #Saved as text
+            self.learningIterations = learningIterations  # par['learningIterations']                     #Saved as text
+            self.N = N  # int(par['N'])                                                  #Saved as integer
+            self.p_spec = p_spec  # float(par['p_spec'])                                      #Saved as float
 
             # Logistical Run Parameters ------------------------------------------------------------------------------------
             # if par['randomSeed'] == 'False' or par['randomSeed'] == 'false':
@@ -219,37 +218,36 @@ def MLRBC(exp):
                 self.useSeed = False  # Saved as Boolean
             else:
                 self.useSeed = True  # Saved as Boolean
-                self.randomSeed = randomSeed  # int(par['randomSeed'])                           #Saved as integer
+                self.randomSeed = randomSeed  # int(par['randomSeed'])                #Saved as integer
 
-            self.labelInstanceID = labelInstanceID  # par['labelInstanceID']                     #Saved as text
-            self.labelPhenotype = labelPhenotype  # par['labelPhenotype']                        #Saved as text
-            self.labelConfidence = labelConfidence
-            self.labelMissingData = labelMissingData  # par['labelMissingData']                  #Saved as text
+            self.labelInstanceID = labelInstanceID  # par['labelInstanceID']                           #Saved as text
+            self.labelPhenotype = labelPhenotype  # par['labelPhenotype']                             #Saved as text
+            self.labelMissingData = labelMissingData  # par['labelMissingData']                         #Saved as text
             self.discreteAttributeLimit = discreteAttributeLimit  # int(par['discreteAttributeLimit'])        #Saved as integer
-            self.trackingFrequency = trackingFrequency  # int(par['trackingFrequency'])          #Saved as integer
+            self.trackingFrequency = trackingFrequency  # int(par['trackingFrequency'])                  #Saved as integer
             self.discretePhenotypeLimit = discretePhenotypeLimit
 
             # Supervised Learning Parameters -------------------------------------------------------------------------------
-            self.nu = nu  # int(par['nu'])                                                       #Saved as integer
-            self.chi = chi  # float(par['chi'])                                                  #Saved as float
-            self.upsilon = upsilon  # float(par['upsilon'])                                      #Saved as float
-            self.theta_GA = theta_GA  # int(par['theta_GA'])                                     #Saved as integer
+            self.nu = nu  # int(par['nu'])                                                #Saved as integer
+            self.chi = chi  # float(par['chi'])                                            #Saved as float
+            self.upsilon = upsilon  # float(par['upsilon'])                                    #Saved as float
+            self.theta_GA = theta_GA  # int(par['theta_GA'])                                    #Saved as integer
             self.theta_del = theta_del  # int(par['theta_del'])                                  #Saved as integer
             self.theta_sub = theta_sub  # int(par['theta_sub'])                                  #Saved as integer
-            self.acc_sub = acc_sub  # float(par['acc_sub'])                                      #Saved as float
-            self.beta = beta  # float(par['beta'])                                               #Saved as float
+            self.acc_sub = acc_sub  # float(par['acc_sub'])                                    #Saved as float
+            self.beta = beta  # float(par['beta'])                                          #Saved as float
             self.delta = delta  # float(par['delta'])
-            self.init_fit = init_fit  # float(par['init_fit'])                                   #Saved as float
+            self.init_fit = init_fit  # float(par['init_fit'])                                  #Saved as float
             self.fitnessReduction = fitnessReduction  # float(par['fitnessReduction'])
 
             # Algorithm Heuristic Options --New-------------------------------------------------------------------------
-            self.doSubsumption = doSubsumption  # bool(int(par['doSubsumption']))                #Saved as Boolean
-            self.selectionMethod = selectionMethod  # par['selectionMethod']                     #Saved as text
+            self.doSubsumption = doSubsumption  # bool(int(par['doSubsumption']))                    #Saved as Boolean
+            self.selectionMethod = selectionMethod  # par['selectionMethod']                           #Saved as text
             self.theta_sel = theta_sel  # float(par['theta_sel'])                                #Saved as float
 
             # PopulationReboot -------------------------------------------------------------------------------
-            self.doPopulationReboot = doPopulationReboot  # bool(int(par['doPopulationReboot'])) #Saved as Boolean
-            self.popRebootPath = popRebootPath  # par['popRebootPath']                           #Saved as text
+            self.doPopulationReboot = doPopulationReboot  # bool(int(par['doPopulationReboot']))          #Saved as Boolean
+            self.popRebootPath = popRebootPath  # par['popRebootPath']                               #Saved as text
 
         # New
         def referenceTimer(self, timer):
@@ -298,8 +296,6 @@ def MLRBC(exp):
             self.phenotypeRef = None  # The column reference for the Class/Phenotype column
             self.discretePhenotype = True  # Is the Class/Phenotype Discrete? (False = Continuous)
             self.MLphenotype = True
-            self.areConfidence = False
-            self.confidenceIDRef = None
             self.attributeInfo = []  # Stores Discrete (0) or Continuous (1) for each attribute
             self.phenotypeList = []  # Stores all possible discrete phenotype states/classes or maximum and minimum values for a continuous phenotype
             self.phenotypeRange = None  # Stores the difference between the maximum and minimum values for a continuous phenotype
@@ -376,12 +372,6 @@ def MLRBC(exp):
                 print("DataManagement: Instance ID Column location = " + str(self.instanceIDRef))
                 column =+ 1
 
-            if cons.labelConfidence in self.trainHeaderList:
-                self.areConfidence = True
-                self.confidenceIDRef = self.trainHeaderList.index(cons.labelConfidence)
-                print("DataManagement: Confidence Column Location = " + str(self.confidenceIDRef))
-                column =+ 1
-
             self.numAttributes = len(self.trainHeaderList) - column - 1
 
             # Identify location of phenotype column
@@ -392,8 +382,6 @@ def MLRBC(exp):
                 print("DataManagement: Error - Phenotype column not found!  Check data set to ensure correct phenotype column label, or inclusion in the data.")
 
             # Adjust training header list to just include attributes labels
-            if self.areConfidence:
-                self.trainHeaderList.pop(self.confidenceIDRef)
 
             if self.areInstanceIDs:
                 if self.phenotypeRef > self.instanceIDRef:
@@ -487,7 +475,7 @@ def MLRBC(exp):
             self.discreteCount = 0
             self.continuousCount = 0
             for att in range(len(rawData[0])):
-                if att != self.instanceIDRef and att != self.phenotypeRef and att != self.confidenceIDRef:  # Get just the attribute columns (ignores phenotype and instanceID columns)
+                if att != self.instanceIDRef and att != self.phenotypeRef:  # Get just the attribute columns (ignores phenotype and instanceID columns)
                     attIsDiscrete = True
                     inst = 0
                     stateDict = {}
@@ -516,7 +504,7 @@ def MLRBC(exp):
             print("DataManagement: Characterizing Attributes...")
             attributeID = 0
             for att in range(len(rawData[0])):
-                if att != self.instanceIDRef and att != self.phenotypeRef and att != self.confidenceIDRef:  # Get just the attribute columns (ignores phenotype and instanceID columns)
+                if att != self.instanceIDRef and att != self.phenotypeRef:  # Get just the attribute columns (ignores phenotype and instanceID columns)
                     for inst in range(len(rawData)):
                         target = rawData[inst][att]
                         if not self.attributeInfo[attributeID][0]:  # If attribute is discrete
@@ -560,13 +548,13 @@ def MLRBC(exp):
             formatted = []
             # Initialize data format---------------------------------------------------------
             for i in range(len(rawData)):
-                formatted.append([None, None, None, None])  # [Attribute States, Phenotype, InstanceID, Confidence]
+                formatted.append([None, None, None, None])  # [Attribute States, Phenotype, InstanceID]
 
             for inst in range(len(rawData)):
                 stateList = []
                 attributeID = 0
                 for att in range(len(rawData[0])):
-                    if att != self.instanceIDRef and att != self.phenotypeRef and att != self.confidenceIDRef:  # Get just the attribute columns (ignores phenotype and instanceID columns)
+                    if att != self.instanceIDRef and att != self.phenotypeRef:  # Get just the attribute columns (ignores phenotype and instanceID columns)
                         target = rawData[inst][att]
 
                         if self.attributeInfo[attributeID][0]:  # If the attribute is continuous
@@ -577,13 +565,6 @@ def MLRBC(exp):
                         else:  # If the attribute is discrete - Format the data to correspond to the GABIL (DeJong 1991)
                             stateList.append(target)  # missing data, and discrete variables, all stored as string objects
                         attributeID += 1
-                    if att == self.confidenceIDRef:
-                        target = rawData[inst][att]
-                        removed = target.replace("[", "")
-                        removed = removed.replace("]", "")
-                        weightList = []
-                        for w in removed.split():
-                            weightList.append(float(w))
 
                 # Final Format-----------------------------------------------
                 formatted[inst][0] = stateList  # Attribute states stored here
@@ -595,8 +576,7 @@ def MLRBC(exp):
                     formatted[inst][2] = rawData[inst][self.instanceIDRef]  # Instance ID stored here
                 else:
                     pass  # instance ID neither given nor required.
-                if self.areConfidence:
-                    formatted[inst][3] = weightList
+
                     # -----------------------------------------------------------
             random.shuffle(formatted)  # One time randomization of the order the of the instances in the data, so that if the data was ordered by phenotype, this potential learning bias (based on instance ordering) is eliminated.
             return formatted
@@ -612,21 +592,19 @@ def MLRBC(exp):
             # Initialize the first dataset instance to be passed to eLCS
             self.currentTrainState = self.formatData.trainFormatted[self.dataRef][0]
             self.currentTrainPhenotype = self.formatData.trainFormatted[self.dataRef][1]
-            self.currentTrainConfidence = self.formatData.trainFormatted[self.dataRef][3]
             if cons.testFile == 'None':
                 pass
             else:
                 self.currentTestState = self.formatData.testFormatted[self.dataRef][0]
                 self.currentTestPhenotype = self.formatData.testFormatted[self.dataRef][1]
-                self.currentTestConfidence = self.formatData.testFormatted[self.dataRef][3]
 
         def getTrainInstance(self):
             """ Returns the current training instance. """
-            return [self.currentTrainState, self.currentTrainPhenotype, self.currentTrainConfidence]
+            return [self.currentTrainState, self.currentTrainPhenotype]
 
         def getTestInstance(self):
             """ Returns the current training instance. """
-            return [self.currentTestState, self.currentTestPhenotype, self.currentTestConfidence]
+            return [self.currentTestState, self.currentTestPhenotype]
 
         def newInstance(self, isTraining):
             """  Shifts the environment to the next instance in the data. """
@@ -638,7 +616,6 @@ def MLRBC(exp):
                     self.dataRef += 1
                     self.currentTrainState = self.formatData.trainFormatted[self.dataRef][0]
                     self.currentTrainPhenotype = self.formatData.trainFormatted[self.dataRef][1]
-                    self.currentTrainConfidence = self.formatData.trainFormatted[self.dataRef][3]
                 else:  # Once learning has completed an epoch (i.e. a cycle of iterations though the entire training dataset) it starts back at the first instance in the data)
                     self.resetDataRef(isTraining)
 
@@ -650,7 +627,6 @@ def MLRBC(exp):
                     self.dataRef += 1
                     self.currentTestState = self.formatData.testFormatted[self.dataRef][0]
                     self.currentTestPhenotype = self.formatData.testFormatted[self.dataRef][1]
-                    self.currentTestConfidence = self.formatData.testFormatted[self.dataRef][3]
 
         def resetDataRef(self, isTraining):
             """ Resets the environment back to the first instance in the current data set. """
@@ -658,11 +634,9 @@ def MLRBC(exp):
             if isTraining:
                 self.currentTrainState = self.formatData.trainFormatted[self.dataRef][0]
                 self.currentTrainPhenotype = self.formatData.trainFormatted[self.dataRef][1]
-                self.currentTrainConfidence = self.formatData.trainFormatted[self.dataRef][3]
             else:
                 self.currentTestState = self.formatData.testFormatted[self.dataRef][0]
                 self.currentTestPhenotype = self.formatData.testFormatted[self.dataRef][1]
-                self.currentTestConfidence = self.formatData.testFormatted[self.dataRef][3]
 
         def startEvaluationMode(self):
             """ Turns on evaluation mode.  Saves the instance we left off in the training data. """
@@ -685,7 +659,6 @@ def MLRBC(exp):
             self.numerosity = 1  # The number of rule copies stored in the population.  (Indirectly stored as incremented numerosity)
             self.aveMatchSetSize = None  # A parameter used in deletion which reflects the size of match sets within this rule has been included.
             self.deletionVote = None  # The current deletion weight for this classifier.
-            self.ConfidenceEst = []
 
             # Experience Management ---------------------------------------------
             self.timeStampGA = None  # Time since rule last in a correct set.
@@ -694,8 +667,11 @@ def MLRBC(exp):
             # Classifier Accuracy Tracking -------------------------------------
             self.matchCount = 0  # Known in many LCS implementations as experience i.e. the total number of times this classifier was in a match set
             self.correctCount = 0  # The total number of times this classifier was in a correct set
-            self.ConfidenceError = 0
             self.loss = 0
+            self.precision = 0
+            self.recall = 0
+            self.f1 = 0
+            self.acc = 0
 
             if isinstance(c, list):  # note subtle new change
                 self.classifierCovering(a, b, c, d)
@@ -1189,26 +1165,6 @@ def MLRBC(exp):
             else:
                 self.accuracy = 1 - (self.loss / float(self.matchCount))
 
-        def updateConfidence(self, confidence):
-            """Update the confidence value estimate"""
-            if not self.ConfidenceEst:
-                for C in confidence:
-                    self.ConfidenceEst.append(cons.beta * C)
-            else:
-                for it in range(len(confidence)):
-                    self.ConfidenceEst[it] =  self.ConfidenceEst[it] + cons.beta * ((confidence[it]-self.ConfidenceEst[it]))
-
-        def updateConfidenceError(self, confidence):
-            """Update confidence estimation error"""
-            Sum = 0
-            if not self.ConfidenceEst:
-                self.ConfidenceError = 0
-            else:
-                for it in range(len(confidence)):
-                    Sum += math.fabs(confidence[it]-self.ConfidenceEst[it])
-
-            self.ConfidenceError = Sum
-
         def updateFitness(self):
             """ Update the fitness parameter. """
             if cons.env.formatData.discretePhenotype:
@@ -1217,8 +1173,7 @@ def MLRBC(exp):
                 if self.matchCount < 1.0 / cons.beta:
                     self.fitness = pow(self.accuracy, cons.nu)
                 else:
-                    self.fitness = pow(self.accuracy, cons.nu) / (1 + self.ConfidenceError)
-                    #self.fitness = pow(self.accuracy, cons.nu) * math.exp(-cons.alpha * self.ConfidenceError)
+                    self.fitness = pow(self.accuracy, cons.nu) / (1 + 0)
             else:
                 if (self.phenotype[1] - self.phenotype[0]) >= cons.env.formatData.phenotypeRange:
                     self.fitness = 0.0
@@ -1240,7 +1195,7 @@ def MLRBC(exp):
             """ Increases the correct phenotype tracking by one. Once an epoch has completed, rule accuracy can't change."""
             self.correctCount += 1
 
-        def updateLoss(self, TruePhenotype):
+        def updateLoss(self, TruePhenotype):  # Will not be necessary
             # Update the loss value of the classifier
             loss = 0
             for c in range(len(self.phenotype)):
@@ -1248,6 +1203,16 @@ def MLRBC(exp):
                     loss += 1
             loss = loss / len(self.phenotype)
             self.loss += loss
+
+        def updateMLperformance(self, TruePhenotype, combVote):  # New
+
+            Acc = ClassAccuracy()
+            Acc.multiLablePerformace(self.phenotype, TruePhenotype, combVote)
+            self.precision += Acc.getPrecisionSingle()
+            self.recall += Acc.getRecallSingle()
+            self.f1 += Acc.getFmeasureSingle()
+            self.loss += Acc.getLossSingle()
+            self.acc += Acc.getAccuracySingle()
 
         def updateNumerosity(self, num):
             """ Updates the numberosity of the classifier.  Notice that 'num' can be negative! """
@@ -1310,7 +1275,7 @@ def MLRBC(exp):
 
             # print(self.deletionVote)    does this not occur until population is full???
             # ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            classifierString += str(self.ConfidenceEst) + "\t" + str("%.3f" % self.ConfidenceError) + "\t" + str("%.3f" % self.fitness) + "\t" + str("%.3f" % self.accuracy) + "\t" + str(
+            classifierString += str("%.3f" % self.fitness) + "\t" + str("%.3f" % self.accuracy) + "\t" + str(
                 "%d" % self.numerosity) + "\t" + str("%.2f" % self.aveMatchSetSize) + "\t" + str(
                 "%d" % self.timeStampGA) + "\t" + str("%d" % self.initTimeStamp) + "\t" + str("%.2f" % specificity) + "\t"
             # ???classifierString += str("%.2f" %self.deletionVote)+"\t"+str("%d" %self.correctCount)+"\t"+str("%d" %self.matchCount)+"\n"
@@ -1754,6 +1719,7 @@ def MLRBC(exp):
         # --Note New changes here-------------
         def updateSets(self, exploreIter, state_phenotype_conf):
             """ Updates all relevant parameters in the current match and correct sets. """
+
             matchSetNumerosity = 0
             for ref in self.matchSet:
                 matchSetNumerosity += self.popSet[ref].numerosity
@@ -1761,12 +1727,10 @@ def MLRBC(exp):
             for ref in self.matchSet:
                 self.popSet[ref].updateExperience()
                 self.popSet[ref].updateMatchSetSize(matchSetNumerosity)
-                self.popSet[ref].updateLoss(state_phenotype_conf[1])
+                # self.popSet[ref].updateLoss(state_phenotype_conf[1])  # will not be necessary
                 if ref in self.correctSet:
                     self.popSet[ref].updateCorrect()
-                    if cons.env.formatData.areConfidence:
-                        self.popSet[ref].updateConfidenceError(state_phenotype_conf[2])
-                        self.popSet[ref].updateConfidence(state_phenotype_conf[2])
+                self.popSet[ref].updateMLperformance(state_phenotype_conf[1], None)  # New
                 self.popSet[ref].updateAccuracy()
                 self.popSet[ref].updateFitness()
 
@@ -1844,11 +1808,6 @@ def MLRBC(exp):
                 phenotypeRange = cons.env.formatData.phenotypeList[1] - cons.env.formatData.phenotypeList[0]
                 self.avePhenotypeRange = (sumRuleRange / float(self.microPopSize)) / float(phenotypeRange)
 
-            sumErr = 0
-            for cl in self.popSet:
-                sumErr += cl.ConfidenceError
-            self.aveErr = sumErr / len(self.popSet)
-
         # New method
         def runAttGeneralitySum(self, isEvaluationSummary):
             """ Determine the population-wide frequency of attribute specification, and accuracy weighted specification.  Used in complete rule population evaluations. """
@@ -1893,7 +1852,6 @@ def MLRBC(exp):
                 self.tieBreak_Numerosity = {}
                 self.tieBreak_TimeStamp = {}
                 self.matchCount = {}
-                self.conf_est = {} #dictionary to store sum of confidence value per label set
 
                 zero = [0.0] * len(cons.env.formatData.phenotypeList[0])
 
@@ -1912,17 +1870,12 @@ def MLRBC(exp):
                         self.tieBreak_Numerosity[cl.phenotype] += cl.numerosity
                         self.tieBreak_TimeStamp[cl.phenotype] += cl.initTimeStamp
                         self.matchCount[cl.phenotype] += 1
-                        if cl.ConfidenceEst:
-                            self.sumConfidence(cl)
                     else:
                         phenotypeList.append(cl.phenotype)
                         self.vote[cl.phenotype] = cl.fitness * cl.numerosity
                         self.tieBreak_Numerosity[cl.phenotype] = cl.numerosity
                         self.tieBreak_TimeStamp[cl.phenotype] = cl.initTimeStamp
                         self.matchCount[cl.phenotype] = 1
-                        if cl.ConfidenceEst:
-                            self.conf_est[cl.phenotype] = zero
-                            self.sumConfidence(cl)
 
                 highVal = 0.0
                 bestClass = []  # Prediction is set up to handle best class ties for problems with more than 2 classes
@@ -1968,18 +1921,6 @@ def MLRBC(exp):
                 # ----------------------------------------------------------------------
                 else:  # One best class determined by fitness vote
                     self.decision = bestClass[0]
-
-                if cons.env.formatData.areConfidence and self.decision:
-                    estimate = self.conf_est[self.decision]
-                    aveConf = []
-                    for conf in estimate:
-                        if conf != 0:
-                            aveConf.append(conf / self.matchCount[self.decision])
-                        else:
-                            aveConf.append(0.0)
-                    self.conf_estimate = aveConf
-                else:
-                    self.conf_estimate = zero
 
             # -------------------------------------------------------
             # CONTINUOUS PHENOTYPES
@@ -2065,15 +2006,6 @@ def MLRBC(exp):
         def getDecision(self):
             return self.decision
 
-        def getConfidence(self):
-            return self.conf_estimate
-
-        def sumConfidence(self, cl):
-            sumConf = []
-            for a,b in zip(self.conf_est[cl.phenotype], cl.ConfidenceEst):
-                sumConf.append(a+b)
-            self.conf_est[cl.phenotype] = sumConf
-
 
     class ClassAccuracy:
         def __init__(self):
@@ -2103,8 +2035,9 @@ def MLRBC(exp):
             print("FN = " + str(self.F_otherClass))
             print("-----------------------------------------------")
 
+        """
         def ExHammingLoss(self, phenotypePrediction, true_phenotype, phenotype_conf, true_conf):
-            """Calculate extended Hamming loss value for the given prediction"""
+            #Calculate extended Hamming loss value for the given prediction
             it = 0
             Dist = 0.0
             if cons.env.formatData.areConfidence:
@@ -2117,7 +2050,7 @@ def MLRBC(exp):
                     it += 1
             loss = Dist/len(phenotypePrediction)
             return loss
-
+        """
         def labelCount(self, phenotypePrediction, true_phenotype):
             self.trueLabelCount = self.countLabel(true_phenotype)
             self.predictedLabelCount = self.countLabel(phenotypePrediction)
@@ -2167,7 +2100,41 @@ def MLRBC(exp):
             loss = Dist/len(phenotypePrediction)
             return loss
 
-        def multiLablePerformace(self, phenotypePrediction, true_phenotype):
+        def oneError(self, combinedVote, true_phenotype):
+            maxVote = max(combinedVote)
+            maxIndex = []
+            for (ind, v) in enumerate(combinedVote):
+                if v == maxVote:
+                    maxIndex.append(ind)
+            error = 1
+            for ind in maxIndex:
+                if true_phenotype[ind] == '1':
+                    error = 0
+                    break
+            return error
+
+        def rankLoss(self, combinedVote, true_phenotype):
+            L = []
+            Lbar = []
+            for (i, l) in enumerate(true_phenotype):
+                if l == '0':
+                    Lbar.append(i)
+                else:
+                    L.append(i)
+            lossCount = 0
+            for l in L:
+                for lbar in Lbar:
+                    if combinedVote[l] == 0:
+                        lossCount +=1
+                    elif combinedVote[l] <= combinedVote[lbar]:
+                        lossCount += 1
+            if len(Lbar)==0:
+                lossCount = len(L)
+            else:
+                lossCount = lossCount/(len(L)*len(Lbar))
+            return lossCount
+
+        def multiLablePerformace(self, phenotypePrediction, true_phenotype, combinedVote):
             self.labelCount(phenotypePrediction, true_phenotype)
             self.intersection(phenotypePrediction, true_phenotype)
             self.union(phenotypePrediction, true_phenotype)
@@ -2176,6 +2143,9 @@ def MLRBC(exp):
             self.recall_single = self.recall()
             self.accuracy_single = self.accuracy()
             self.f_measure_single = self.f_measure()
+            if not combinedVote == None:
+                self.oneError_single = self.oneError(combinedVote, true_phenotype)
+                self.rankLoss_single = self.rankLoss(combinedVote, true_phenotype)
 
         def getLossSingle(self):
             return self.loss_single
@@ -2191,6 +2161,12 @@ def MLRBC(exp):
 
         def getFmeasureSingle(self):
             return self.f_measure_single
+
+        def getOneErrorSingle(self):
+            return self.oneError_single
+
+        def getRankLossSingle(self):
+            return self.rankLoss_single
 
         def reportMLperformance(self, measureList):
             print("Multi-label performance metrics report.......")
@@ -2219,7 +2195,7 @@ def MLRBC(exp):
             # -------------------------------------------------------
             else:
                 try:
-                    save_path = 'Run_results_MLRBC'
+                    save_path = 'MLRBC_Run_Results'
                     file_name = cons.outFileName + '_LearnTrack_' + str(exp) + '.txt'
                     completeName = os.path.join(save_path, file_name)
                     self.learnTrackOut = open(completeName, 'w')
@@ -2336,13 +2312,10 @@ def MLRBC(exp):
             # -----------------------------------------------------------------------------------------------------------------------------------------
             # MAKE A PREDICTION - utilized here for tracking estimated learning progress.  Typically used in the explore phase of many LCS algorithms.
             # -----------------------------------------------------------------------------------------------------------------------------------------
-            phenotypeConfidence = []
             Acc = ClassAccuracy()
             cons.timer.startTimeEvaluation()
             prediction = Prediction(self.population)
             phenotypePrediction = prediction.getDecision()
-            if cons.env.formatData.areConfidence:
-                phenotypeConfidence = prediction.getConfidence()
             # -------------------------------------------------------
             # PREDICTION NOT POSSIBLE
             # -------------------------------------------------------
@@ -2364,10 +2337,7 @@ def MLRBC(exp):
                     else:
                         self.correct[exploreIter % cons.trackingFrequency] = 0
                 elif cons.env.formatData.MLphenotype:
-                    self.hloss[exploreIter % cons.trackingFrequency] = Acc.ExHammingLoss(phenotypePrediction,
-                                                                                         state_phenotype_conf[1],
-                                                                                            phenotypeConfidence,
-                                                                                            state_phenotype_conf[2])
+                    self.hloss[exploreIter % cons.trackingFrequency] = Acc.hammingLoss(phenotypePrediction, state_phenotype_conf[1])
                 # -------------------------------------------------------
                 # CONTINUOUS PHENOTYPE PREDICTION
                 # -------------------------------------------------------
@@ -2420,6 +2390,8 @@ def MLRBC(exp):
             accuracy = 0
             recall = 0
             fmeasure = 0
+            oneError = 0
+            rankLoss = 0
             MLperformance = {}
             for each in phenotypeList:
                 classAccDict[each] = ClassAccuracy()
@@ -2430,7 +2402,7 @@ def MLRBC(exp):
                 instances = cons.env.formatData.numTestInstances
             # ----------------------------------------------------------------------------------------------
 
-            save_path = 'Run_results_MLRBC'
+            save_path = 'MLRBC_Run_Results'
             fileName = cons.outFileName + '_Prediction_Compare'
             completeName = os.path.join(save_path, fileName)
             predComp = open(completeName + '_' + str(exp) + '.txt', 'w')
@@ -2444,13 +2416,16 @@ def MLRBC(exp):
                 # -----------------------------------------------------------------------------
                 self.population.makeEvalMatchSet(state_phenotype_conf[0])
                 prediction = Prediction(self.population)
+                """
                 if isTrain:
                     phenotypeSelection = prediction.getDecision()
+                    combVote = [0] * cons.env.formatData.ClassCount
                 else:
-                    prediction.combinePredictions(self.population)
-                    combPred = prediction.getCombPred()
-                    combVote = prediction.getCombVote()
-                    phenotypeSelection = combPred
+                """
+                prediction.combinePredictions(self.population)
+                combPred = prediction.getCombPred()
+                combVote = prediction.getCombVote()
+                phenotypeSelection = combPred
 
                 if phenotypeSelection == None:
                     noMatch += 1
@@ -2459,12 +2434,14 @@ def MLRBC(exp):
                 else:  # Instances which failed to be covered are excluded from the accuracy calculation
                     truePhenotype = state_phenotype_conf[1]
                     if cons.env.formatData.MLphenotype:
-                        Acc.multiLablePerformace(phenotypeSelection, truePhenotype)
+                        Acc.multiLablePerformace(phenotypeSelection, truePhenotype, combVote)
                         Hloss += Acc.getLossSingle()
                         precision += Acc.getPrecisionSingle()
                         accuracy += Acc.getAccuracySingle()
                         recall += Acc.getRecallSingle()
                         fmeasure += Acc.getFmeasureSingle()
+                        oneError += Acc.getOneErrorSingle()
+                        rankLoss += Acc.getRankLossSingle()
                     else:
                         for each in phenotypeList:
                             thisIsMe = False
@@ -2495,6 +2472,8 @@ def MLRBC(exp):
             MLperformance["Accuracy"] = accuracy/float(instances)
             MLperformance["Recall"] = recall/float(instances)
             MLperformance["F_measure"] = fmeasure/float(instances)
+            MLperformance["oneError"] = oneError/float(instances)
+            MLperformance["rankLoss"] = rankLoss/float(instances)
 
 
             # Calculate Balanced Accuracy---------------------------------------------
@@ -2590,12 +2569,38 @@ def MLRBC(exp):
             resultList = [adjustedAccuracyEstimate, instanceCoverage]
             return resultList
 
+        def populationReboot(self):
+            """ Manages the reformation of a previously saved eLCS classifier population. """
+            # --------------------------------------------------------------------
+            try:  # Re-open track learning file for continued tracking of progress.
+                self.learnTrackOut = open(cons.outFileName + '_LearnTrack.txt', 'a')
+            except Exception as inst:
+                print(type(inst))
+                print(inst.args)
+                print(inst)
+                print('cannot open', cons.outFileName + '_LearnTrack.txt')
+                raise
+
+            # Extract last iteration from file name---------------------------------------------
+            temp = cons.popRebootPath.split('_')
+            iterRef = len(temp) - 1
+            completedIterations = int(temp[iterRef])
+            print("Rebooting rule population after " + str(completedIterations) + " iterations.")
+            self.exploreIter = completedIterations - 1
+            for i in range(len(cons.learningCheckpoints)):  # checkpoints not in demo 2
+                cons.learningCheckpoints[i] += completedIterations
+            cons.maxLearningIterations += completedIterations
+
+            # Rebuild existing population from text file.--------
+            self.population = ClassifierSet(cons.popRebootPath)
+
+
     class OutputFileManager:
 
         def writePopStats(self, outFile, trainEval, testEval, exploreIter, pop, correct):
             """ Makes output text file which includes all of the evaluation statistics for a complete analysis of all training and testing data on the current eLCS rule population. """
             try:
-                save_path = 'Run_results_MLRBC'
+                save_path = 'MLRBC_Run_Results'
                 completeName = os.path.join(save_path, outFile)
                 popStatsOut = open(completeName + '_' + str(exploreIter) + '_PopStats_' + str(exp) + '.txt', 'w')
             except Exception as inst:
@@ -2674,7 +2679,7 @@ def MLRBC(exp):
         def writePop(self, outFile, exploreIter, pop):
             """ Writes a tab delimited text file outputting the entire evolved rule population, including conditions, phenotypes, and all rule parameters. """
             try:
-                save_path = 'Run_results_MLRBC'
+                save_path = 'MLRBC_Run_Results'
                 completeName = os.path.join(save_path, outFile)
                 rulePopOut = open(completeName + '_RulePop_' + str(exp) + '.txt', 'w')
             except Exception as inst:
@@ -2692,7 +2697,7 @@ def MLRBC(exp):
             for i in range(len(headList)):
                 rulePopOut.write(str(headList[i]) + "\t")
             rulePopOut.write(
-                "Phenotype\tConfidence\tConfidenceError\tFitness\tAccuracy\tNumerosity\tAveMatchSetSize\tTimeStampGA\tInitTimeStamp\tSpecificity\tDeletionProb\tCorrectCount\tMatchCount\n")
+                "Phenotype\tFitness\tAccuracy\tNumerosity\tAveMatchSetSize\tTimeStampGA\tInitTimeStamp\tSpecificity\tDeletionProb\tCorrectCount\tMatchCount\n")
 
             # Write each classifier--------------------------------------------------------------------------------------------------------------------------------------
             for cl in pop.popSet:
